@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
+const { ObjectId } = require('mongoose').Types;
 
 const app = express();
 const PORT = 3000;
@@ -98,12 +99,23 @@ app.post('/user', async (req, res) => {
     }
 });
 
-app.get('/user/data', async (req, res) => {
-    try {
+app.get('/user/data/:id', async (req, res) => {
+    const id = req.params.id;
 
-    } catch (error) {
-
+    if (!ObjectId.isValid(id)) {
+        return res.status(400).send('Invalid ObjectId');
     }
+    try {
+        const user = await User.findById(id);
+        if (!user) {
+            return res.status(404).send('User not found');
+        } else {
+            res.json(user);
+        }
+    } catch (error) {
+        res.status(500).send('Error fetching data');
+    }
+
 });
 
 app.listen(PORT, () => {

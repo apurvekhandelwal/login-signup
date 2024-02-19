@@ -154,8 +154,11 @@
                 .then(response => response.json())
                 .then(data => {
                     console.log('success', data);
+                    const id = data.data._id;
+                    console.log(id);
                     alert("User data saved successfully");
-                    document.getElementById("userForm").reset();
+                    // document.getElementById("userForm").reset();
+                    window.location.href = `display.html?id=${id}`;
                 })
                 .catch((error) => {
                     console.error('Error', error);
