@@ -7,7 +7,7 @@ const app = express();
 const PORT = 3000;
 
 
-mongoose.connect('mongodb://localhost:27017/Mobzway');
+mongoose.connect('mongodb+srv://root:1234@mobzcluster.padbn7r.mongodb.net/Mobzway');
 
 const Schema = mongoose.Schema;
 
