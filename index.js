@@ -3,9 +3,13 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
 const { ObjectId } = require('mongoose').Types;
+const socketio = require('socket.io');
 
 const app = express();
 const PORT = 3000;
+
+const server = require('http').createServer(app);
+const io = socketio(server);
 
 
 mongoose.connect('mongodb+srv://root:1234@mobzcluster.padbn7r.mongodb.net/Mobzway');
@@ -70,6 +74,10 @@ const userSchema = new mongoose.Schema({
             },
             message: props => `${props.value} is not a valid password!. Must be atleast 6 characters long and contain atleast on uppercase, one lowercase, one digit and one special character.`
         }
+    },
+    socketId: {
+        type: String,
+        default: null
     },
     createdAt: {
         type: Date,
