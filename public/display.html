@@ -52,7 +52,7 @@
             const params = new URLSearchParams(window.location.search);
             const id = params.get('id');
             console.log(id);
-            fetch(`https://user-service-pib9.onrender.com/user/data/${id}`)
+            fetch(/* `https://user-service-pib9.onrender.com/user/data/${id}` */`http://localhost:3000/user/data/${id}`)
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('firstName').textContent = data.firstName;

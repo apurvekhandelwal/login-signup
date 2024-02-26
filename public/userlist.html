@@ -1,0 +1,41 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connected Users</title>
+</head>
+
+<body>
+    <h1>Connected Users</h1>
+    <ul id="userList"></ul>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        // Function to update the user list
+        function updateUserList(users) {
+            const userList = document.getElementById('userList');
+            userList.innerHTML = '';
+
+            users.forEach(user => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `Email: ${user.email}, Socket ID: ${user.socketId}`;
+                userList.appendChild(listItem);
+            });
+        }
+
+        // Event listener for receiving user data
+        socket.on('connectedUsers', users => {
+            updateUserList(users);
+        });
+
+        socket.emit('joinLiveUsers');
+
+    </script>
+</body>
+
+</html>

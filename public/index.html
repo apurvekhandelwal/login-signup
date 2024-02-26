@@ -124,8 +124,11 @@
             </div>
         </form>
     </div>
+    <script src="/socket.io/socket.io.js"></script>
 
     <script>
+        const socket = io();
+
         document.getElementById("userForm").addEventListener("submit", function (event) {
             event.preventDefault();
 
@@ -144,7 +147,7 @@
                 password: document.getElementById("password").value
             };
 
-            fetch('https://user-service-pib9.onrender.com/user', {
+            fetch(/* 'https://user-service-pib9.onrender.com/user' */'http://localhost:3000/user', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -156,9 +159,14 @@
                     console.log('success', data);
                     const id = data.data._id;
                     console.log(id);
-                    alert("User data saved successfully");
+                    // alert("User data saved successfully");
                     // document.getElementById("userForm").reset();
-                    window.location.href = `display.html?id=${id}`;
+                    socket.emit('joinLiveUsers', {
+                        email: data.data.email,
+                        firstName: data.data.firstName,
+                        lastName: data.data.lastName
+                    });
+                    window.location.href = /* `display.html?id=${id}` */'userlist.html';
                 })
                 .catch((error) => {
                     console.error('Error', error);

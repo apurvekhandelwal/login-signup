@@ -4,11 +4,12 @@ const mongoose = require('mongoose');
 const path = require('path');
 const { ObjectId } = require('mongoose').Types;
 const socketio = require('socket.io');
+const http = require('http');
 
 const app = express();
 const PORT = 3000;
 
-const server = require('http').createServer(app);
+const server = http.createServer(app);
 const io = socketio(server);
 
 
@@ -91,6 +92,8 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
+const liveUsers = {};
+
 app.use(bodyParser.json());
 
 app.use('/', express.static(__dirname + '/public'));
@@ -98,13 +101,45 @@ app.use('/', express.static(__dirname + '/public'));
 
 app.post('/user', async (req, res) => {
     try {
-        const newUser = new User(req.body);
+        const userData = req.body;
+        const newUser = new User(userData);
         await newUser.save();
+        io.emit('joinLiveUsers', {
+            email: userData.email,
+            firstName: userData.firstName,
+            lastName: userData.lastName
+        });
         res.status(200).json({ message: 'Data saved successfully', data: newUser });
     } catch (error) {
         res.status(500).json({ error: error.message });
 
     }
+});
+
+io.on('connection', (socket) => {
+    console.log('A user connected');
+
+    // Handle joining 'live_users' room
+    socket.on('joinLiveUsers', (data) => {
+
+        socket.join('live_users');
+
+        liveUsers[socket.id] = {
+            email: data.email,
+            // firstname: data.firstName,
+            // lastname: data.lastName,
+            socketId: socket.id
+        };
+
+        io.to(socket.id).emit('connectedUsers', Object.values(liveUsers));
+    });
+
+    // // Handle disconnect
+    // socket.on('disconnect', () => {
+    //     console.log('A user disconnected');
+
+    //     io.to('live_users').emit('connectedUsers', Object.values(liveUsers));
+    // });
 });
 
 app.get('/user/data/:id', async (req, res) => {
@@ -126,7 +161,7 @@ app.get('/user/data/:id', async (req, res) => {
 
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
 
