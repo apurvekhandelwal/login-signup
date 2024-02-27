@@ -155,7 +155,7 @@ app.post('/', (req, res) => {
         });
         console.log("Successfully Inserted!");
         // res.status(200).json({ message: 'Data saved successfully', data: newUser });
-        res.send("User registered");
+        res.send("User Data Uploaded successfully");
     }).catch((error) => {
         console.error('Error inserting user', error);
         res.status(500).send('Internal server error');
