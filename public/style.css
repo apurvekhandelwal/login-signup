@@ -1,9 +1,3 @@
-* {
-    margin: 10;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
     font-family: Arial, sans-serif;
     display: flex;
@@ -15,7 +9,6 @@ body {
     background-position: center;
     margin: 0;
     padding: 0;
-    background-size: cover;
 }
 
 #userForm {
@@ -25,7 +18,6 @@ body {
     padding: 20px;
     backdrop-filter: blur(5px);
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 #userForm h2 {
@@ -50,16 +42,37 @@ body {
 }
 
 #userForm button {
-    background-color: hsl(70, 100%, 50%);
-    color: #020707;
+    background-color: rgb(60, 0, 255);
+    color: #fdfdfd77;
     margin-top: 5px;
     font-size: 15px;
     border: none;
     outline: none;
     border-radius: 3px;
     padding: 5px;
-    transition: 0.5s;
+    /* transition: 0.5s; */
     cursor: pointer;
+}
+
+.password-container {
+    position: relative;
+    width: 100%;
+}
+
+#password {
+    padding-right: 35px;
+    /* Increase space for the eye button */
+}
+
+.eye-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    /* Adjust the right positioning */
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #555;
+    /* Darker color for better visibility */
 }
 
 

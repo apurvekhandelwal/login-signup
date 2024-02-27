@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <title>Register form</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="script.js"></script>
 </head>
 
@@ -14,49 +15,64 @@
 
     <form id="userForm">
         <h2>User Form</h2>
-        <label for="firstName">FirstName:</label>
+        <label for="firstName">First Name:</label><br>
         <input type="text" id="firstName" placeholder="Enter first name" required>
         <br>
 
-        <label for="lastName">LastName:</label>
+        <label for="lastName">Last Name:</label><br>
         <input type="text" id="lastName" placeholder="Enter last name" required>
         <br>
 
-        <label for="mobile">Mobile no:</label>
+        <label for="mobile">Mobile number:</label><br>
         <input type="tel" id="mobile" placeholder="Enter mobile no" required>
         <br>
 
-        <label for="email">Email:</label>
+        <label for="email">Email:</label><br>
         <input type="email" id="email" placeholder="Enter email address" required>
         <br>
 
-        <label for="street">Street:</label>
+        <label for="street">Street:</label><br>
         <input type="text" id="street" placeholder="Enter locality" required>
         <br>
 
-        <label for="city">City:</label>
+        <label for="city">City:</label><br>
         <input type="text" id="city" placeholder="Enter city" required>
         <br>
 
-        <label for="state">State:</label>
+        <label for="state">State:</label><br>
         <input type="text" id="state" placeholder="Enter State" required>
         <br>
 
-        <label for="country">Country:</label>
+        <label for="country">Country:</label><br>
         <input type="text" id="country" placeholder="Enter country" required>
         <br>
 
-        <label for="loginId">Login id:</label>
+        <label for="loginId">Login id:</label><br>
         <input type="text" id="loginId" placeholder="Enter 8 character alpha numeric" required>
         <br>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" placeholder="6 char password " required>
+        <label for="password">Password:</label><br>
+        <div class="password-container">
+            <input type="password" id="password" placeholder="Enter 6 character password " required>
+            <span class="eye-icon" onclick="togglePasswordVisibility()">
+                <i class="fas fa-eye"></i>
+            </span>
+        </div>
         <br>
 
         <button type="button" onclick="saveUserData()">Save</button>
     </form>
+    <script>
+        function togglePasswordVisibility() {
+            var passwordInput = document.getElementById("password");
 
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+            } else {
+                passwordInput.type = "password";
+            }
+        }
+    </script>
 </body>
 
 </html>

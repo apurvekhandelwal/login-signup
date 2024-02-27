@@ -37,12 +37,14 @@
                         success: function (data) {
                             console.log(data);
                             data.forEach((user) => {
-                                alert(`Email:${user.email},
-                        LoginID:${user.loginId},
-                        Name:${user.firstName} ${user.lastName},
-                        MobileNO:${user.mobile},
-                        Address:${user.address.street}, ${user.address.city}`)
-                            })
+                                alert(
+                                    `User Details :-
+Email: ${user.email},
+LoginID: ${user.loginId},
+Name: ${user.firstName} ${user.lastName},
+Mobile number: ${user.mobile},
+Address: ${user.address.street}, ${user.address.city}, ${user.address.state}, ${user.address.country}`)
+                            });
                         },
                         error: function (error) {
                             console.error('Error:', error);
