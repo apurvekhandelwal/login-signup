@@ -3,14 +3,26 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
 const { ObjectId } = require('mongoose').Types;
-const socketio = require('socket.io');
-const http = require('http');
+const cors = require("cors");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-const server = http.createServer(app);
-const io = socketio(server);
+app.use(cors());
+
+// const http = require("http").Server(app);
+// const io = require("socket.io")(http, {
+//     cors: {
+//         origin: "*",
+//         methods: ["GET", "POST"],
+//     },
+// });
+
+const http = require('http')
+const socketIo = require('socket.io')
+const server = http.Server(app)
+const io = socketIo(server);
+
 
 
 mongoose.connect('mongodb+srv://root:1234@mobzcluster.padbn7r.mongodb.net/Mobzway');
@@ -95,71 +107,121 @@ const User = mongoose.model('User', userSchema);
 const liveUsers = {};
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
+app.get('/users', (req, res) => {
+    res.sendFile(__dirname + '/data.html')
+});
 app.use('/', express.static(__dirname + '/public'));
 
-
-app.post('/user', async (req, res) => {
-    try {
-        const userData = req.body;
-        const newUser = new User(userData);
-        await newUser.save();
-        // io.emit('joinLiveUsers', {
-        //     email: userData.email,
-        //     firstName: userData.firstName,
-        //     lastName: userData.lastName
-        // });
-        res.status(200).json({ message: 'Data saved successfully', data: newUser });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-
-    }
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/register.html')
 });
 
-io.on('connection', (socket) => {
-    console.log('A user connected');
+// app.post('/user', async (req, res) => {
+//     try {
+//         const userData = req.body;
+//         const newUser = new User(userData);
+//         await newUser.save();
 
-    // Handle joining 'live_users' room
-    socket.on('joinLiveUsers', (data) => {
+//         res.status(200).json({ message: 'Data saved successfully', data: newUser });
+//     } catch (error) {
+//         res.status(500).json({ error: error.message });
 
-        socket.join('live_users');
+//     }
+// });
 
-        liveUsers[socket.id] = {
-            email: data.email,
-            // firstname: data.firstName,
-            // lastname: data.lastName,
-            socketId: socket.id
-        };
+app.post('/', (req, res) => {
+    const userData = req.body;
+    User.create(userData).then(() => {
+        io.on('connection', socket => {
+            console.log('A user connected from server (before emit)');
+            socket.join("live_users");
 
-        io.to(socket.id).emit('connectedUsers', Object.values(liveUsers));
+            liveUsers[socket.id] = {
+                email: userData.email,
+                firstname: userData.firstName,
+                lastname: userData.lastName,
+                socketId: socket.id
+            };
+
+            console.log(liveUsers);
+
+            io.to("live_users").emit('UserList', Object.values(liveUsers));
+
+            socket.on('disconnect', () => {
+                console.log('User Disconnected', socket.id);
+            });
+        });
+        console.log("Successfully Inserted!");
+        // res.status(200).json({ message: 'Data saved successfully', data: newUser });
+        res.send("User registered");
+    }).catch((error) => {
+        console.error('Error inserting user', error);
+        res.status(500).send('Internal server error');
     });
-
-    // // Handle disconnect
-    // socket.on('disconnect', () => {
-    //     console.log('A user disconnected');
-
-    //     io.to('live_users').emit('connectedUsers', Object.values(liveUsers));
-    // });
 });
 
-app.get('/user/data/:id', async (req, res) => {
-    const id = req.params.id;
+app.post('/users', (req, res) => {
+    const email = req.body.email;
 
-    if (!ObjectId.isValid(id)) {
-        return res.status(400).send('Invalid ObjectId');
-    }
-    try {
-        const user = await User.findById(id);
-        if (!user) {
-            return res.status(404).send('User not found');
-        } else {
-            res.json(user);
-        }
-    } catch (error) {
-        res.status(500).send('Error fetching data');
-    }
-
+    User.find({ email }).then((data) => {
+        res.json(data);
+    }).catch((error) => {
+        console.error('Error finding data', error);
+        res.status(500).send('error to find data');
+    });
 });
+
+// io.on('connection', (socket) => {
+//     console.log('A user connected from server (before emit)');
+
+//     // Handle joining 'live_users' room
+//     socket.on('joinLiveUsers', (data) => {
+//         console.log("socket.on --- data:---- in serverFile", data);
+
+//         socket.join('live_users');
+
+//         liveUsers[socket.id] = {
+//             email: data.email,
+//             firstname: data.firstName,
+//             lastname: data.lastName,
+//             socketId: socket.id
+//         };
+//         const connectedUsersData = Object.values(liveUsers);
+//         console.log('Emitting connectedUsers:', connectedUsersData); // Log the data being emitted
+
+//         io.to(socket.id).emit('connectedUsers', connectedUsersData);
+//         console.log('A user connected from server (after emit)');
+
+//     });
+
+//     // Handle disconnect
+//     // socket.on('disconnect', () => {
+//     //     console.log('A user disconnected');
+
+//     //     io.to('live_users').emit('connectedUsers', Object.values(liveUsers));
+//     // });
+// });
+
+// app.get('/user/data/:id', async (req, res) => {
+//     const id = req.params.id;
+
+//     if (!ObjectId.isValid(id)) {
+//         return res.status(400).send('Invalid ObjectId');
+//     }
+//     try {
+//         const user = await User.findById(id);
+//         if (!user) {
+//             return res.status(404).send('User not found');
+//         } else {
+//             res.json(user);
+//         }
+//     } catch (error) {
+//         res.status(500).send('Error fetching data');
+//     }
+
+// });
 
 server.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

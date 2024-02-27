@@ -1,0 +1,49 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connected Users</title>
+</head>
+
+<body>
+    <h1>Connected Users</h1>
+    <ul id="userList"></ul>
+
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"
+        integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k"
+        crossorigin="anonymous"></script>
+    <script>
+        const socket = io("http://localhost:3000");
+        // socket.on();
+        console.log("connected in userList.html");
+
+        // Function to update the user list
+        function updateUserList(users) {
+            console.log("updateUserList --- users:----", users);
+            const userList = document.getElementById('userList');
+            userList.innerHTML = '';
+
+            users.forEach(user => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `Email: ${user.email}, Socket ID: ${user.socketId}`;
+                userList.appendChild(listItem);
+            });
+        }
+
+        // Event listener for receiving user data
+        socket.on('connectedUsers', (users) => {
+            console.log("socket.on --- users:----", users);
+            updateUserList(users);
+        });
+
+        // socket.on("joinLiveUsers", (data) => {
+        //     console.log("data in userList--", data);
+        // });
+
+    </script>
+</body>
+
+</html>

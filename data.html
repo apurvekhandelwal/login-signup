@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Users Information</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <div id="userData">
+        <h2>User's Chat Room</h2>
+        <ul id="user-list">
+        </ul>
+    </div>
+
+    <script>
+        var socket = io();
+
+        socket.on('UserList', (userDetails) => {
+            const userList = document.getElementById('user-list');
+            console.log(userDetails)
+            userList.innerHTML = '';
+            userDetails.forEach((user) => {
+                const li = document.createElement('li');
+                li.textContent = `Email Id: ${user.email}, Socket ID:${user.socketId}`;
+                userList.appendChild(li);
+                li.addEventListener('click', () => {
+                    $.ajax({
+                        type: 'POST',
+                        url: 'https://user-service-pib9.onrender.com/users',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ email: user.email }),
+                        success: function (data) {
+                            console.log(data);
+                            data.forEach((user) => {
+                                alert(`Email:${user.email},
+                        LoginID:${user.loginId},
+                        Name:${user.firstName} ${user.lastName},
+                        MobileNO:${user.mobile},
+                        Address:${user.address.street}, ${user.address.city}`)
+                            })
+                        },
+                        error: function (error) {
+                            console.error('Error:', error);
+                            alert("Failed to fetch details.");
+                        }
+                    })
+
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>

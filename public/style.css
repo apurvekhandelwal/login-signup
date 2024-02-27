@@ -1,0 +1,119 @@
+* {
+    margin: 10;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #f4f4f4;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 0;
+    padding: 0;
+    background-size: cover;
+}
+
+#userForm {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    padding: 20px;
+    backdrop-filter: blur(5px);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#userForm h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#userForm label {
+    display: block;
+    font-weight: bold;
+}
+
+#userForm input {
+    font-size: 18px;
+    width: 100%;
+    padding: 10px;
+    outline: none;
+    border-radius: 5px;
+    text-indent: 2px;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+#userForm button {
+    background-color: hsl(70, 100%, 50%);
+    color: #020707;
+    margin-top: 5px;
+    font-size: 15px;
+    border: none;
+    outline: none;
+    border-radius: 3px;
+    padding: 5px;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+
+.data {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 50px;
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 380px;
+}
+
+.data h2 {
+    margin: 10px;
+    text-transform: capitalize;
+    font-weight: 600;
+}
+
+.data ul {
+    list-style: none;
+    padding: 40px;
+}
+
+.data ul li {
+    padding: 4px;
+    font-weight: 500;
+}
+
+#userData {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 620px;
+    padding: 10px 30px;
+    border-radius: 5px;
+}
+
+#userData h2 {
+    margin: 15px;
+    text-transform: capitalize;
+    font-weight: bold;
+    font-size: 20px;
+    padding: 10px;
+}
+
+#user-list li {
+    list-style: none;
+    padding: 10px;
+    margin: 5px;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+}

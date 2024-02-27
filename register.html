@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Register form</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="script.js"></script>
+</head>
+
+<body>
+
+    <form id="userForm">
+        <h2>User Form</h2>
+        <label for="firstName">FirstName:</label>
+        <input type="text" id="firstName" placeholder="Enter first name" required>
+        <br>
+
+        <label for="lastName">LastName:</label>
+        <input type="text" id="lastName" placeholder="Enter last name" required>
+        <br>
+
+        <label for="mobile">Mobile no:</label>
+        <input type="tel" id="mobile" placeholder="Enter mobile no" required>
+        <br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" placeholder="Enter email address" required>
+        <br>
+
+        <label for="street">Street:</label>
+        <input type="text" id="street" placeholder="Enter locality" required>
+        <br>
+
+        <label for="city">City:</label>
+        <input type="text" id="city" placeholder="Enter city" required>
+        <br>
+
+        <label for="state">State:</label>
+        <input type="text" id="state" placeholder="Enter State" required>
+        <br>
+
+        <label for="country">Country:</label>
+        <input type="text" id="country" placeholder="Enter country" required>
+        <br>
+
+        <label for="loginId">Login id:</label>
+        <input type="text" id="loginId" placeholder="Enter 8 character alpha numeric" required>
+        <br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" placeholder="6 char password " required>
+        <br>
+
+        <button type="button" onclick="saveUserData()">Save</button>
+    </form>
+
+</body>
+
+</html>
